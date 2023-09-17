@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FirewaLLM</title>
+    <link rel="stylesheet" href="../static/index.css">
+</head>
+<body>
+    <div class="container">
+        <div class="chat-history">
+            <div class="chat-controls">
+                <img src="../static/images/logo2.png" alt=""  width="150px" height="90px">
+            </div>
+            <div class="separator"></div>
+            <div class="function-module"></div>
+            <div class="separator"></div>
+            <div class="settings">
+                <div class="mode">
+                    <span class="mode-label">青少年模式：</span>
+                    <label class="switch">
+                        <input type="checkbox" id="toggleButton">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+               
+            </div>
+        </div>
+
+        <div class="chat-panel">
+            <div class="control-panel">
+                <button class="collapse-chat-btn"><img src="../static/images/fold.svg" alt="" height="15px" width="20px"></button>
+                <div class="extras">
+                    <button class="clear extras-one" onclick="clearChat()"><img src="../static/images/clear.svg" alt="" width="25px" height="25px"></button>
+                    <button class="clear extras-one" onclick="handleExport()"><img src="../static/images/export.svg" alt="" width="25px" height="25px"></button>
+                
+                </div>
+            </div>
+            <!-- Add chat content here. -->
+            <div id="chat-display">
+
+            </div>
+            <div class="user-input-outside">
+                <div class="user-input-area">
+                    <textarea id="user-input" placeholder="键入消息..."></textarea>
+                    <button id="send-button">发送</button>
+                    <select id="model-select">
+                        <option value="model1">百度云模型</option>
+                        <option value="model2">腾讯云模型</option>
+                        <option value="model3" selected>gpt-3.5-turbo</option>
+                        <option value="model4">privategpt</option>
+                        <option value="model5">chatglm</option>
+                        <!-- Add chat model here. -->
+                    </select>
+                    <select id="sensitivity-level">
+                        <option value="0">低</option>
+                        <option value="1" selected>中</option>
+                        <option value="2">高</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../static/index.js"></script>
+</body>
+</html>
