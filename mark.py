@@ -1,5 +1,4 @@
 # mark.py
-
 import re
 import jieba
 import torch

@@ -6,6 +6,7 @@ from cloud3 import cloud_model3
 from local_model.privategpt import privateGPT1
 from local_model.chatglm6b import chatglm
 import os
+
 app = Flask(__name__, static_url_path='/static')
 # set env
 os.environ["HTTP_PROXY"] = "http://127.0.0.1:7890" 

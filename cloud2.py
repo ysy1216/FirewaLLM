@@ -6,6 +6,7 @@ from tencentcloud.common.profile.http_profile import HttpProfile
 from tencentcloud.common.exception.tencent_cloud_sdk_exception import TencentCloudSDKException
 from tencentcloud.tbp.v20190627 import tbp_client, models
 
+
 def cloud_model2(user_input):
     try:
         # Instantiating an authentication object requires passing in the Tencent Cloud account SecretId and SecretKey to enter the parameters. Here, it is also necessary to pay attention to the confidentiality of the key pair

@@ -1,6 +1,7 @@
 #cloud3 gpt3.5
 import openai
 
+
 def cloud_model3(content):
   openai.api_key = "EnterYourKey"
   response = openai.ChatCompletion.create(

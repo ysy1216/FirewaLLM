@@ -1,6 +1,7 @@
 #cloud1 BaiDuModel
 import requests
 import json
+
 def cloud_model1(question):
   #access_token
   url = "https://aip.baidubce.com/rpc/2.0/unit/service/chat?access_token=EnterYourAccess_Token"

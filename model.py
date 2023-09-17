@@ -1,6 +1,7 @@
 import torch.nn as nn
 from transformers import BertModel, BertConfig
 from transformers import BertForSequenceClassification
+
 # Bert
 class BertTextClassifier(nn.Module):
     def __init__(self, bert_model_name, num_labels):
