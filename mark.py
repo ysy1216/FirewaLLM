@@ -1,18 +1,19 @@
 # mark.py
+
 import re
 import jieba
 import torch
-from model import BertTextClassifier
-from transformers import BertTokenizer, BertConfig, AutoTokenizer, BertModel
+from model import BertTextClassifier, BertLstmClassifier
+from transformers import BertTokenizer, BertConfig, AutoTokenizer
 import random
 from feature import getFeature, stop_word
 
 class MaskHandler:
     def __init__(self, model_path):
         # Initialize the local BERT model
-        self.labels = ["N", "P", "A", "E", "O"]
+        self.labels = ["Y", "N"]
         self.bert_config = BertConfig.from_pretrained('bert-base-chinese')
-        self.model = BertTextClassifier(self.bert_config, len(self.labels))
+        self.model = BertLstmClassifier(self.bert_config, len(self.labels))
         self.model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')), strict=False)
         self.model.eval()
         self.tokenizer = BertTokenizer.from_pretrained('bert-base-chinese')
@@ -23,7 +24,7 @@ class MaskHandler:
     def classic(self, query):
         sensitive_words = []
         for tmp_text in jieba.lcut(query):
-            print(tmp_text)
+            #print(tmp_text)
             token = self.tokenizer(tmp_text, add_special_tokens=True, padding='max_length', truncation=True,
                                    max_length=512)
             input_ids = torch.tensor([token['input_ids']], dtype=torch.long)
@@ -31,14 +32,12 @@ class MaskHandler:
             token_type_ids = torch.tensor([token['token_type_ids']], dtype=torch.long)
             predicted = self.model(input_ids, attention_mask, token_type_ids)
             pred_label = torch.argmax(predicted, dim=1)
-            if self.labels[pred_label] in ["A", "E", "P", "N"]:  
-                sensitive_words.append(tmp_text)
 
         return sensitive_words
 
     #Desensitization algorithm
     def mask_sensitive_info(self, text, sensitive, level, tag):
-        print("脱敏等级第" + (str)(level+1) + "级")
+        #print("脱敏等级第" + (str)(level+1) + "级")
         for word in sensitive:
             # text_jieba = jieba.lcut(text)
             len_word = len(word)
@@ -84,18 +83,14 @@ def fun_isSen(maskHandler, text, tag):
     token = maskHandler.tokenizer(text, add_special_tokens=True, padding='max_length', truncation=True, max_length=512)
     input_ids = torch.tensor([token['input_ids']], dtype=torch.long)
     attention_mask = torch.tensor([token['attention_mask']], dtype=torch.long)
-    token_type_ids = torch.tensor([token['token_type_ids']], dtype=torch.long) #
+    token_type_ids = torch.tensor([token['token_type_ids']], dtype=torch.long)
     predicted = maskHandler.model(input_ids, attention_mask, token_type_ids)
     output = torch.softmax(predicted, dim=1)
     print(output)
-    #Output [:, 4] and Output [:, 1] is an insensitive probability
+    #output [:, 1]is an insensitive probability
     if tag == "false":
-        if output[:, 4].item() < 0.3:
+        if output[:, 0].item() > 0.5:
             flag = True
-    elif tag == "true":
-        if output[:, 1].item() < 0.3:
-            flag = True
-
     return flag
 
 #Invert the insensitive phrase returned by tfidf and return the sensitive phrase
@@ -109,10 +104,7 @@ def getSen(nosen, text):
     return sen
 #When inputting multiple sentences, determine whether each sentence is sensitive and then desensitize it
 def fun_1(text, selected_sen_level, tag):
-    if tag == "true":
-        maskHandler = MaskHandler("The path of your model")#Sensitive model
-    else:
-        maskHandler = MaskHandler("The path of your model")#Adolescent model
+    maskHandler = MaskHandler("model/sen_model.pkl")  # Sensitive model
     text_splite = fun_splite(text)
     tmp = text
     for tmp_text in text_splite:
@@ -123,10 +115,13 @@ def fun_1(text, selected_sen_level, tag):
                 sen_fea = getSen(getFeature(tag, text_stop), text_stop)
             else:
                 sen_fea = getFeature(tag, tmp_text, True)
+        #print(sen_fea)
         res = maskHandler.mask_sensitive_info(tmp, sen_fea, selected_sen_level, tag)
         tmp = res
+    print(tmp)
     return tmp
 
-
-
+if __name__ == '__main__':
+    str = "陈宇阳的手机号码是多少?"
+    fun_1(str, 1, "false")
 
