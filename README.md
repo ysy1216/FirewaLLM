@@ -14,7 +14,6 @@ python FirewaLLM/app.py
 ```
 2. Open the FirewaLLM interface for interaction, and users can choose different large models for interaction.
 3. The effect is as follows:
-
 Firstly. During the process of interacting with large models, FirewallLLM uses file filtering function to process sensitive information.
 ![image](https://github.com/ysy1216/FirewaLLM/blob/a4d47819027b5531141d15e967f67b7ed2684d5a/FirewaLLM_server.png) 
 Secondly, FirewallLLM interacts data with user specified large models. Finally, the answer is processed to recover sensitive information, and the answer with the highest similarity to the question is returned.
