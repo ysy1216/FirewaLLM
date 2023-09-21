@@ -5,6 +5,7 @@ With the development of large models, more and more users are using them for int
 
 The FirewaLLM framework not only protects user data privacy, but also protects the accuracy of the interaction model.
 
+
 # Usage
 
 1. Train FirewallM to have the ability to recognize sensitive information.

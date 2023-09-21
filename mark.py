@@ -122,6 +122,6 @@ def fun_1(text, selected_sen_level, tag):
     return tmp
 
 if __name__ == '__main__':
-    str = "陈宇阳的手机号码是多少?"
+    str = "..."
     fun_1(str, 1, "false")
 
